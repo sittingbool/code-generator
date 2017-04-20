@@ -1,0 +1,48 @@
+{
+  "name": "code-generator",
+  "version": "0.1.0",
+  "description": "Generate code from local templates",
+  "main": "dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "scripts": {
+    "test": "mocha ./dist/test/*.spec.js",
+    "dev-test-watch": "mocha-typescript-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sittingbool/code-generator.git"
+  },
+  "keywords": [
+    "generator",
+    "template",
+    "code",
+    "automation"
+  ],
+  "bugs": {
+    "url": "https://github.com/sittingbool/code-generator/issues"
+  },
+  "homepage": "https://github.com/sittingbool/code-generator#readme",
+  "author": "Richard Habermann <sittingbool@gmx.de> (https://github.com/sittingbool)",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "inquirer": "^3.0.6",
+    "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
+    "pkginfo": "^0.4.0",
+    "string-template": "^1.0.0",
+    "underscore.string": "^3.3.4"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/commander": "^2.9.0",
+    "@types/inquirer": "0.0.32",
+    "@types/lodash": "^4.14.62",
+    "@types/mkdirp": "^0.3.29",
+    "@types/node": "^7.0.12",
+    "@types/string-template": "^1.0.2",
+    "@types/underscore.string": "0.0.30",
+    "mocha": "^3.2.0",
+    "mocha-typescript": "^1.0.23",
+    "rimraf": "^2.6.1"
+  }
+}
