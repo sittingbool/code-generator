@@ -1,11 +1,11 @@
 {
   "name": "sb-code-generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Generate code from local templates",
   "main": "dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "bin": {
-    "sbcdgen": "bin/sbcdgen"
+    "sbcdgen": "dist/src/index.js"
   },
   "scripts": {
     "test": "mocha ./dist/test/*.spec.js",
