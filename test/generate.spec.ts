@@ -2,8 +2,8 @@ import * as rimraf from 'rimraf';
 import * as path from 'path';
 
 import { suite, test} from "mocha-typescript";
-import { slow, timeout, skip, only } from "mocha-typescript";
-import {CodeGenerator} from "../src/lib/generator"; // only for testing unconventional behaviour or single functions, see https://www.npmjs.com/package/mocha-typescript
+import { slow, timeout, skip, only } from "mocha-typescript"; // only for testing unconventional behaviour or single functions, see https://www.npmjs.com/package/mocha-typescript
+import {CodeGenerator} from "../src/lib/generator";
 
 @suite
 class CodeGeneratorTest {

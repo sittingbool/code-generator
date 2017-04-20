@@ -29,6 +29,7 @@
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "pkginfo": "^0.4.0",
+    "sb-util-ts": "^0.3.0",
     "string-template": "^1.0.0",
     "underscore.string": "^3.3.4"
   },

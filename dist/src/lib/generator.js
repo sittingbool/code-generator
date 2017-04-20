@@ -19,7 +19,13 @@ class CodeGenerator {
         this._callback = function (err) { if (err)
             throw new Error(err); };
         this.options = _.extend(this.defaultOptions, options);
-        this.templateAbsolutePath = path.join(__dirname, '../..', this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+        if (this.options.customTemplatesUrl.startsWith('/')) {
+            this.templateAbsolutePath =
+                path.join(this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+        }
+        else {
+            this.templateAbsolutePath = path.join(__dirname, '../..', this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+        }
     }
     generate(callback) {
         if (typeof callback == 'function') {

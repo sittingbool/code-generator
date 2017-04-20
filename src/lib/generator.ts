@@ -13,7 +13,6 @@ import * as _ from 'lodash';
 export interface IGeneratorOptions
 //----------------------------------------------------------------------------------------------------------
 {
-
     componentName?: string;
     templateName?: string;
     showPrompt?: boolean;
@@ -48,8 +47,13 @@ export class CodeGenerator
     //------------------------------------------------------------------------------------------------------
     {
         this.options = _.extend(this.defaultOptions, options);
-        this.templateAbsolutePath = path.join(__dirname, '../..',
-            this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+        if ( this.options.customTemplatesUrl.startsWith('/') ) { // absolute path set
+            this.templateAbsolutePath =
+                path.join(this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+        } else { // relative path set
+            this.templateAbsolutePath = path.join(__dirname, '../..',
+                this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+        }
     }
 
 
