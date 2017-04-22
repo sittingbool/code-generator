@@ -1,3 +1,4 @@
+import { StringFormat } from "./string-format";
 export interface IGeneratorOptions {
     componentName?: string;
     templateName?: string;
@@ -11,10 +12,12 @@ export declare class CodeGenerator {
     templateAbsolutePath: string;
     defaultOptions: any;
     options: IGeneratorOptions;
+    protected formatter: StringFormat;
     protected _callback: (err: string) => void;
     constructor(options: IGeneratorOptions);
     generate(callback?: (err: string) => never): true | void;
     getFiles(dir: string, files_?: string[]): string[];
     generateTemplate(templatePath: any): Promise<any>;
+    protected setupFormatter(replacement: string): void;
     finalize(): true | void;
 }

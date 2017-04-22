@@ -33,7 +33,6 @@
     "mkdirp": "^0.5.1",
     "pkginfo": "^0.4.0",
     "sb-util-ts": "^0.3.0",
-    "string-template": "^1.0.0",
     "underscore.string": "^3.3.4"
   },
   "license": "MIT",
@@ -43,10 +42,12 @@
     "@types/lodash": "^4.14.62",
     "@types/mkdirp": "^0.3.29",
     "@types/node": "^7.0.12",
+    "@types/should": "^8.3.0",
     "@types/string-template": "^1.0.2",
     "@types/underscore.string": "0.0.30",
     "mocha": "^3.2.0",
     "mocha-typescript": "^1.0.23",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "should": "^11.2.1"
   }
 }

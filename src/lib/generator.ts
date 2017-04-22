@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------------------------------------
 import * as path from 'path';
 import * as fs from 'fs';
-import * as format from 'string-template';
 import * as _s from 'underscore.string';
 import * as inquirer from 'inquirer';
 import * as mkdirp from 'mkdirp';
 import * as _ from 'lodash';
+import {StringFormat} from "./string-format";
 //----------------------------------------------------------------------------------------------------------
 
 
@@ -38,6 +38,7 @@ export class CodeGenerator
 
     options: IGeneratorOptions = {};
 
+    protected formatter: StringFormat;
     protected _callback = function(err: string) { if (err) throw new Error(err); };
     //------------------------------------------------------------------------------------------------------
 
@@ -54,6 +55,8 @@ export class CodeGenerator
             this.templateAbsolutePath = path.join(__dirname, '../..',
                 this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
         }
+
+        this.setupFormatter(this.options.componentName);
     }
 
 
@@ -130,7 +133,7 @@ export class CodeGenerator
         }
 
         return new Promise((resolve, reject) => {
-            fs.readFile(absoluteTemplatePath, 'utf8', (err, data) => {
+            fs.readFile(absoluteTemplatePath, 'utf8', (err, data: string) => {
                 if (err) {
                     return reject(err.message || 'unknown (1)');
                 }
@@ -141,23 +144,36 @@ export class CodeGenerator
 
 
                 mkdirp(dest + templatePathWithoutFileName, () => {
-                    fs.writeFile(dest + templateFilename.replace("{component}",
-                            this.options.componentName), format(data, {
-                                name: this.options.componentName,
-                                Name: _s.classify(this.options.componentName)
-                            }),
-                            (err) => {
-                                if (err) {
-                                    return reject(err.message || 'unknown (2)');
-                                }
-                                console.log('\x1b[32m%s\x1b[0m: ', "Created: " +
-                                    dest + templateFilename.replace("{component}",
-                                        this.options.componentName));
-                                resolve(null);
-                            });
+                    let writeCb;
+                    let destinationPath =
+                        dest + templateFilename.replace("{component}", this.options.componentName);
+
+                    data = this.formatter.format(data);
+
+                    writeCb = (err) => {
+                        if (err) {
+                            return reject(err.message || 'unknown (2)');
+                        }
+                        console.log('\x1b[32m%s\x1b[0m: ', "Created: " + destinationPath);
+                        resolve(null);
+                    };
+
+                    fs.writeFile(destinationPath, data, writeCb);
                 });
             });
         });
+    }
+
+
+    //------------------------------------------------------------------------------------------------------
+    protected setupFormatter(replacement: string)
+    //------------------------------------------------------------------------------------------------------
+    {
+        let variables = {
+            "name": replacement,
+            "Name": _s.classify(replacement)
+        };
+        this.formatter = new StringFormat(variables);
     }
 
 

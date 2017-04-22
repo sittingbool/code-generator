@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const fs = require("fs");
-const format = require("string-template");
 const _s = require("underscore.string");
 const inquirer = require("inquirer");
 const mkdirp = require("mkdirp");
 const _ = require("lodash");
+const string_format_1 = require("./string-format");
 class CodeGenerator {
     constructor(options) {
         this.files = [];
@@ -26,6 +26,7 @@ class CodeGenerator {
         else {
             this.templateAbsolutePath = path.join(__dirname, '../..', this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
         }
+        this.setupFormatter(this.options.componentName);
     }
     generate(callback) {
         if (typeof callback == 'function') {
@@ -91,20 +92,27 @@ class CodeGenerator {
                 let templateFilename = absoluteTemplatePath.replace(this.templateAbsolutePath + "/", "");
                 let templatePathWithoutFileName = templateFilename.substring(0, templateFilename.lastIndexOf("/"));
                 mkdirp(dest + templatePathWithoutFileName, () => {
-                    fs.writeFile(dest + templateFilename.replace("{component}", this.options.componentName), format(data, {
-                        name: this.options.componentName,
-                        Name: _s.classify(this.options.componentName)
-                    }), (err) => {
+                    let writeCb;
+                    let destinationPath = dest + templateFilename.replace("{component}", this.options.componentName);
+                    data = this.formatter.format(data);
+                    writeCb = (err) => {
                         if (err) {
                             return reject(err.message || 'unknown (2)');
                         }
-                        console.log('\x1b[32m%s\x1b[0m: ', "Created: " +
-                            dest + templateFilename.replace("{component}", this.options.componentName));
+                        console.log('\x1b[32m%s\x1b[0m: ', "Created: " + destinationPath);
                         resolve(null);
-                    });
+                    };
+                    fs.writeFile(destinationPath, data, writeCb);
                 });
             });
         });
+    }
+    setupFormatter(replacement) {
+        let variables = {
+            "name": replacement,
+            "Name": _s.classify(replacement)
+        };
+        this.formatter = new string_format_1.StringFormat(variables);
     }
     finalize() {
         let i, promises = [];
