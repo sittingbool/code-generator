@@ -73,6 +73,10 @@ if ( !error ) {
         config = defaultConfig;
     }
 
+    if ( !stringIsEmpty(program.target) ) {
+        config.dest = path.join(process.cwd(), program.target);
+    }
+
     generator = new CodeGenerator(config);
 
     generator.generate();

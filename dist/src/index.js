@@ -54,6 +54,9 @@ if (!error) {
     else {
         config = defaultConfig;
     }
+    if (!sb_util_ts_1.stringIsEmpty(program.target)) {
+        config.dest = path.join(process.cwd(), program.target);
+    }
     generator = new generator_1.CodeGenerator(config);
     generator.generate();
 }
