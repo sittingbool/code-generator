@@ -50,10 +50,10 @@ export class CodeGenerator
         this.options = _.extend(this.defaultOptions, options);
         if ( this.options.customTemplatesUrl.startsWith('/') ) { // absolute path set
             this.templateAbsolutePath =
-                path.join(this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+                path.join(this.options.customTemplatesUrl, this.options.templateName.toLowerCase());
         } else { // relative path set
             this.templateAbsolutePath = path.join(__dirname, '../..',
-                this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+                this.options.customTemplatesUrl, this.options.templateName.toLowerCase());
         }
 
         this.setupFormatter(this.options.componentName);
@@ -109,7 +109,7 @@ export class CodeGenerator
         let files = fs.readdirSync(dir);
 
         for (let i in files) {
-            let name = dir + '/' + files[i];
+            let name = path.join(dir , files[i]);
             if (fs.statSync(name).isDirectory()){
                 this.getFiles(name, files_);
             } else {
@@ -125,11 +125,11 @@ export class CodeGenerator
     //------------------------------------------------------------------------------------------------------
     {
         let absoluteTemplatePath = path.resolve(templatePath);
-        let dest = this.options.wrapInFolder ? this.options.componentName + "/" : "";
+        let dest = this.options.wrapInFolder ? this.options.componentName : "";
 
         // check if the file need a specific location
         if (this.options.dest) {
-            dest = this.options.dest + "/" + dest;
+            dest = path. join(this.options.dest, dest);
         }
 
         return new Promise((resolve, reject) => {
@@ -143,10 +143,10 @@ export class CodeGenerator
                     templateFilename.substring(0, templateFilename.lastIndexOf("/"));
 
 
-                mkdirp(dest + templatePathWithoutFileName, () => {
+                mkdirp(path.join(dest, templatePathWithoutFileName), () => {
                     let writeCb;
                     let destinationPath =
-                        dest + templateFilename.replace("{component}", this.options.componentName);
+                        path.join(dest, templateFilename.replace("{component}", this.options.componentName));
 
                     data = this.formatter.format(data);
 

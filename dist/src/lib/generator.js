@@ -21,10 +21,10 @@ class CodeGenerator {
         this.options = _.extend(this.defaultOptions, options);
         if (this.options.customTemplatesUrl.startsWith('/')) {
             this.templateAbsolutePath =
-                path.join(this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+                path.join(this.options.customTemplatesUrl, this.options.templateName.toLowerCase());
         }
         else {
-            this.templateAbsolutePath = path.join(__dirname, '../..', this.options.customTemplatesUrl + '/' + this.options.templateName.toLowerCase());
+            this.templateAbsolutePath = path.join(__dirname, '../..', this.options.customTemplatesUrl, this.options.templateName.toLowerCase());
         }
         this.setupFormatter(this.options.componentName);
     }
@@ -68,7 +68,7 @@ class CodeGenerator {
         files_ = files_ || [];
         let files = fs.readdirSync(dir);
         for (let i in files) {
-            let name = dir + '/' + files[i];
+            let name = path.join(dir, files[i]);
             if (fs.statSync(name).isDirectory()) {
                 this.getFiles(name, files_);
             }
@@ -80,9 +80,9 @@ class CodeGenerator {
     }
     generateTemplate(templatePath) {
         let absoluteTemplatePath = path.resolve(templatePath);
-        let dest = this.options.wrapInFolder ? this.options.componentName + "/" : "";
+        let dest = this.options.wrapInFolder ? this.options.componentName : "";
         if (this.options.dest) {
-            dest = this.options.dest + "/" + dest;
+            dest = path.join(this.options.dest, dest);
         }
         return new Promise((resolve, reject) => {
             fs.readFile(absoluteTemplatePath, 'utf8', (err, data) => {
@@ -91,9 +91,9 @@ class CodeGenerator {
                 }
                 let templateFilename = absoluteTemplatePath.replace(this.templateAbsolutePath + "/", "");
                 let templatePathWithoutFileName = templateFilename.substring(0, templateFilename.lastIndexOf("/"));
-                mkdirp(dest + templatePathWithoutFileName, () => {
+                mkdirp(path.join(dest, templatePathWithoutFileName), () => {
                     let writeCb;
-                    let destinationPath = dest + templateFilename.replace("{component}", this.options.componentName);
+                    let destinationPath = path.join(dest, templateFilename.replace("{component}", this.options.componentName));
                     data = this.formatter.format(data);
                     writeCb = (err) => {
                         if (err) {
